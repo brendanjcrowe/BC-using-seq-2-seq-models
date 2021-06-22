@@ -1,11 +1,9 @@
-# Final_Project_CS780
+# Behavioral Cloning using Seq-2-seq models
 
-In this repository you will find all code and plots related to my cs780 Final project. The bulk of the code is in jupyter notebooks.
-I apologize if it is messy. I did my best to title the notebooks and .py files to the best of my ability.
+After learning about probabilistic and neural approaches to sequential machine learning I decided to apply what I had learned to the Imitation Learning (IL) domain. Since many reinforcement learning tasks can be models as Markov Decision Processes (MDPs) that have a sequential nature, I thought that it would be interesting to see in we could using neural networks and Conditional Random Fields (CRFs) to do Behavioral Cloning (BC). I decided to try solving several of the classic control tasks (mountain car, acrobot, etc) using a CRF and a bidirectional Long Short Term Memory (LSTM). I then compared my results with a respected method, Generative Adversarial Imitation Learning (GAIL), and a baseline (Logistic Regression). 
 
-To see all the model and their results look at results.ipynb. Most of the models run in that final were trained either on google Colab, or in a different notebook. 
+For the LSTM I choose bi-directional because it more accurately captured the relationship between the action and the next state than a uni-directional LSTM could. While this violates the Markovian assumption of an MDP it proved to work well. Another problem with the LSTM was that when using the model in the actually environment it could not accurately predict the action at the begin of an episode. I was able to solve this problem by taking the train data and augmenting it. Each demonstration was turned into a distinct number of demonstration equal to the length of the original demonstration. In doing this the LSTM was able to learn the starting behavior better. FOr example if my original training data had been a single demonstration of length 100, my augmented training data would be 100 demonstrations of length 1, 2, ..., 100.
 
-To run code from my notebooks: I have included a serialized version of my working conda environment in environment.yaml.
-I would suggest cloning this environment to run code as my dependencies are wacky.
+For the CRF I used a simple linear chain CRF and then added a dependency on the previous state. This again violated the Markovian assumption, but worked very well. The CRF was able to achieve performance close to that of GAIL and the LSTM and took a fraction of the time to train.
 
-To run code in the Colab notebooks: I am not sure about this they should be able to run on my environment but im not 100% sure.
+A more in depth discussion of the results can be found in the paper and presentation. These write ups, as well as the code can be found of [GitHub](https://github.com/brendanjcrowe/BC-using-seq-2-seq-models)
